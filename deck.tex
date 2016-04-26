@@ -3,7 +3,7 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage[normalem]{ulem}
-\usepackage{tikz}
+\usepackage{graphicx}
 
 \frenchspacing
 
@@ -16,7 +16,7 @@
 \begin{document}
 
 \title{MOS Technology 6502}
-\subtitle{Architecture and Design}
+\subtitle{Architecture, Design, and Impact}
 \author{Chris Ranc \\ Travis Whitaker}
 \institute{Rochester Institute of Technolgoy}
 \date{Spring 2016}
@@ -24,6 +24,8 @@
 
 \begin{frame}
 \frametitle{MOS Technology 6502 Overview}
+\begin{columns}[T]
+\begin{column}[T]{0.7\textwidth}
 \begin{itemize}
 \item Released in 1975 in 40-pin DIP package.
 \item Competed directly with the Intel 8080 and Zilog Z80.
@@ -32,6 +34,11 @@
 \item MOS acquired by Commodore in 1976.
 \item Still used in embedded systems today.
 \end{itemize}
+\end{column}
+\begin{column}[T]{0.3\textwidth}
+\includegraphics[scale=0.3]{images/MOS6502.png}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -61,12 +68,22 @@
 
 \begin{frame}
 \frametitle{Beginnings of the Microcomputer}
+\begin{columns}[T]
+\begin{column}[T]{0.6\textwidth}
 \begin{itemize}
 \item To bolster sales, Peddle designs the MDT-650 single-board computer development platform.
 \item MDT-650 extremely popular with both engineers and hobbyists.
 \item Apple, Commodore, Atari, BBC capitalize on the emerging hobbyist/home computer market.
 \item Apple II, Commodore PET \& VIC-20, BBC Micro, Atari 800 all designed around the 6502.
 \end{itemize}
+\end{column}
+\begin{column}[T]{0.4\textwidth}
+\begin{figure}
+\centering
+\includegraphics[scale=0.225]{images/appleii-system.jpg}
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -95,6 +112,14 @@
 
 \begin{frame}
 \frametitle{6502 Implementation}
+\begin{columns}[T]
+\begin{column}[T]{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{images/cpu_layout.png}
+\end{figure}
+\end{column}
+\begin{column}[T]{0.5\textwidth}
 \begin{itemize}
 \item 1-2 MHz typical clock frequency.
 \item Two synchronizations per cycle.
@@ -102,16 +127,44 @@
 \item 2-stage concurrent fetch pipeline.
 \item 3,510 total transistors.
 \end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{6502 Polysilicon Diffusion Layers}
+\begin{figure}
+\centering
+\includegraphics[scale=0.2]{images/polylayers.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{6502 Layer Overlay}
+\begin{figure}
+\centering
+\includegraphics[scale=0.2]{images/all.png}
+\end{figure}
 \end{frame}
 
 \begin{frame}
 \frametitle{Addressing Modes}
+\begin{columns}[T]
+\begin{column}[T]{0.5\textwidth}
 \begin{itemize}
 \item Absolute (Immediate Address)
 \item Branch-relative
 \item Zero Page
 \item Absolute/Zero-Page Indirection
 \end{itemize}
+\end{column}
+\begin{column}[T]{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[scale=0.6]{images/mmap.png}
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 \end{document}
