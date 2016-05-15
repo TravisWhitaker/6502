@@ -30,9 +30,19 @@ MOS Technology, Microprocessor, Computer Architecture
 
 \section{Introduction}
 
-\IEEEPARstart{T}{his} is the indroduction to the paper.
+\IEEEPARstart{T}{he} MOS Technology 6502, typically refered to as simply
+``the sixty-five-oh-two,'' is an 8-bit microprocessor introduced in 1975. The
+6502's design incorporated several architectural breakthroughs in microprocessor
+design, allowing units to be sold at a small fraction of the cost of its
+contemporary competitors, including the Motorola 6800, Intel 8080, and Zilog Z80
+microprocessors. The 6502's low cost and power requirements are owed to its
+small die size. Use of a statically scheduled instruction pipeline and simple
+yet novel debugging features enabled the design to approach or even exceed the
+throughput of its competitors while utilizing a fraction of the silicon. The low
+unit cost and availability of cheap development boards for the 6502 spurred on
+the home computer market in the early 1980's, and enabled the design of
+affordable home video game consoles.
 
-The 6502 is neat.
 
 \section{History}
 
@@ -50,7 +60,91 @@ The 6502 is neat.
 
 \subsection{Features and Specifications}
 
+The 6502 is equipped with three 8-bit general purpose registers: an accumulator
+\texttt{A}, and two index registers \texttt{X} and \texttt{Y}. The CPU also has
+an 8-bit stack pointer a 16-bit program counter, and an 8-bit processor status
+register. The 6502 utilizes a 16-bit memory address bus, however, none of the
+general purpose registers available on the CPU are wide enough to accomodate a
+whole memory address; this has interesting consequences for programming,
+discussed in section IV.
+
+Two interupt generating signals are provided, a maskable level sensitive
+interrupt and a non-maskable edge sensitive interrupt. The non-maskable proved
+critical for the design of game consoles, which must stop game logic during the
+rendering of a frame for display on a television. Due to the limited memory
+available on 6502-based systems, many game consoles would compute and buffer a
+single scan line of the output image at once, rather than buffering the entire
+frame. This rendering technique required only a small amount of memory, but
+total use of the CPU throughout the frame rendering process was necessary. On
+many 6502-based game consoles, the non-maskable interrupt was simply tied to the
+60 Hz (America) or 50 Hz (Japan, Europe) vertical blanking synchronization
+signal.
+
+The original 6502 die used an 8 $\mu m$ process on a 3.9 x 4.3 mm die area,
+embedded in a 40-pin ceramic DIP unit. Approximately 15\% of the area on the
+original die was dedicated to the instruction decoding PLA. However, the PLA was
+only mask-programmable, and there was effectively no way to update the
+instruction decoding logic on the original 6502 chips. This would prove to be
+problematic, as rushed development led to several quirks in the original
+manufacturing run. The first very first lot of units shipped in 1975 exhibited
+a bug in the \texttt{ROR} instruction, causing it to behave as a \texttt{LSR}
+instruction without carry, and a bug in the \texttt{JMP} instruction when
+performing an indirect jump. Several other batches and clones from other
+manufacturers are known for various other strange quirks or undocumented
+opcodes.
+
+One of the most touted features of the Motorola 6800, the 6502's principal
+competitor, was its extensive debugging facilities. The 6800 could be easily
+halted with a non-maskable debugging interrupt, and the hardware even supported
+something of a primitive core dump feature without the need for dual-port RAM.
+The 6502 features only one built in debugging feature in contrast: a bus ready
+signal. Exposing the bus ready signal was a simple enhancement, but proved
+invaluable when debugging 6502 programs. A program under test could effectively
+be ``stepped-through'' in hardware, by overriding the system clock with a
+``step-through'' signal that may only be asserted when the bus ready signal
+indicated the CPU was ready to move on to the next instruction. The 6502 was the
+first affordable microprocessor with development boards featuring such a
+hardware step-through feature, and this lone debugging facility proved
+sufficient for the majority of 6502 program development.
+
 \subsection{Typical System Configuration}
+
+Contemporary 6502-based systems often features 1-2 MHz clock signals. Although
+this is a small fraction of the clock frequency often used in systems based on
+competing CPUs (e.g. the Motorola 68A70, a 6800 derivative, could operate at up
+to 10 MHz), the 6502 pipeline allowed for similar throughputs to be achieved.
+The control unit utilized both the rising edge and falling edge of the clock
+signal for pipeline synchronization, allowing for partial overlap between
+instruction fetch and execution.
+
+The 6502 has a hard-wired memory map, so there is little variation in memory
+architecture among 6502-based systems. Addresses 0100-01FF are reserved for the
+stack, 4000-7FFF are reserved for memory-mapped IO components, and all addresses
+FFF9 and up are reserved for the interrupt vector tables. Most early 6502-based
+systems such as the Apple II, Commodore PET, and the Atari 2600 reserved
+addresses 8000-FFF9 for program ROM. However, a technique known as bank
+switching, first used on the Nintendo Famicom/NES, allowed using a portion of
+this address space for indexing into one of several smaller memory banks. Care
+had to be taken to reserve a critical code region for duplication on all banks,
+otherwise program continuity would be impossible. This technique allowed
+Famicom/NES games to approach several megabits in size; the largest licensed
+game was \emph{Kirby's Adventure} with a 6 MBit ROM.
+
+The memory-mapped IO region was critical for 6502-based home computers and game
+consoles. Home computers and terminal-based development boards often used this
+region for disk drives, tape drives, or printers. It was possible to use this
+region for drawing video; the Commodore PET's video terminal operated this way.
+However, only a small region of the framebuffer could be written out at a time,
+so video terminals implemented with this technique often suffered from extremely
+slow frame refresh rates. This was a concious trade-off made by Commodore for
+the PET, as the system was designed strictly for the business market. Other
+systems marketed for gaming, such as the Famicom/NES and the Commodore 64, used
+dedicated video units with direct memory access to allow for a full frame to be
+buffered for each television vertical blank synchronization. This freed CPU time
+during rendering as well, as the CPU only had to initiate a DMA transfer for
+each line of the frame. More advanced video effects could be accomplished, such
+as dithering and transparency, by executing other memory operations during frame
+drawing.
 
 \section{Programming}
 
@@ -58,7 +152,31 @@ The 6502 is neat.
 
 \subsection{Addressing Modes}
 
-\subsection{Timing Considerations}
+\subsection{Interrupts and Timing Considerations}
+
+The 6502 features two programmable interrupts: an edge-triggered non-maskable
+interrupt, and a level-triggered maskable interrupt. The maskable interrupt
+is triggered by a high voltage on an open collector, or by execution of the
+\emph{BRK} instruction, and jumps to address FFFE in the interrupt vector table.
+The non-maskable interrupt is triggered by pulling the NMI line low. This
+behavior may be leveraged by external components to detect when the NMI handler
+is finished executing; the NMI is non-nestable, so the NMI signal won't be
+pulled high again until the interrupt handler has returned. The NMI causes the
+cpu to jump to address FFFA in the interrupt vector table.
+
+Upon interrupt receipt, the CPU finishes the current instruction. Then the
+program counter and program status registers are pushed onto the stack. The
+program counter is then loaded with the address in the appropriate entry in the
+interrupt vector table. The interrupt handler returns by executing the
+\texttt{RTI} return from interrupt instruction. There are only 256 bytes
+available on the 6502's stack, and each interrupt handler stack frame occupies
+three such bytes. Therefore, it is critical that no deeply nested interrupt
+handlers are executed on the 6502.
+
+The 6502's reset signal also acts somewhat like a non-programmable interrupt.
+After CPU start up is complete, the program counter is set to the address at
+FFFC in the interrupt vector table. Typically this vector entry will contain
+the address of the first byte of program ROM.
 
 \section{Conclusion}
 The conclusion goes here.
@@ -70,17 +188,6 @@ H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
   0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
 
 \end{thebibliography}
-
-% biography section
-% 
-% If you have an EPS/PDF photo (graphicx package needed) extra braces are
-% needed around the contents of the optional argument to biography to prevent
-% the LaTeX parser from getting confused when it sees the complicated
-% \includegraphics command within an optional argument. (You could create
-% your own custom macro containing the \includegraphics command to make things
-% simpler here.)
-%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
-% or if you just want to reserve a space for a photo:
 
 \begin{IEEEbiographynophoto}{Chris Ranc}
 Something about Chris.
