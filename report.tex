@@ -43,7 +43,6 @@ unit cost and availability of cheap development boards for the 6502 spurred on
 the home computer market in the early 1980's, and enabled the design of
 affordable home video game consoles.
 
-
 \section{History}
 
 \subsection{Beginnings at Motorola}
@@ -61,7 +60,7 @@ affordable home video game consoles.
 \subsection{Features and Specifications}
 
 The 6502 is equipped with three 8-bit general purpose registers: an accumulator
-\texttt{A}, and two index registers \texttt{X} and \texttt{Y}. The CPU also has
+A, and two index registers X and Y. The CPU also has
 an 8-bit stack pointer a 16-bit program counter, and an 8-bit processor status
 register. The 6502 utilizes a 16-bit memory address bus, however, none of the
 general purpose registers available on the CPU are wide enough to accomodate a
@@ -87,8 +86,8 @@ only mask-programmable, and there was effectively no way to update the
 instruction decoding logic on the original 6502 chips. This would prove to be
 problematic, as rushed development led to several quirks in the original
 manufacturing run. The first very first lot of units shipped in 1975 exhibited
-a bug in the \texttt{ROR} instruction, causing it to behave as a \texttt{LSR}
-instruction without carry, and a bug in the \texttt{JMP} instruction when
+a bug in the ROR instruction, causing it to behave as a LSR
+instruction without carry, and a bug in the JMP instruction when
 performing an indirect jump. Several other batches and clones from other
 manufacturers are known for various other strange quirks or undocumented
 opcodes.
@@ -150,9 +149,175 @@ drawing.
 
 \subsection{Instruction Set}
 
+The 6502 has 151 instructions. Instruction encoding is variable-width;
+instructions vary from one to three bytes wide. Numerous variants and clones of
+the 6502 were produced, and many of these units were not exactly compatible with
+the original MOS Technology instruction set architecture. Perhaps the most
+frequently omitted feature was the binary coded decimal mode. The BCD mode was
+incorporated in the original design so that the 6502 could be positioned in the
+calculator market. However, the 6502 saw limited use in this market sector and
+even the earliest 6502 clones often omitted the BCD mode; a key example is the
+Ricoh 2A03 used in the Nintendo Famicom/NES.
+
+The 6502's limited registers and small stack size make programming in compiled
+programming languages problematic. C compilers do exist for the architecture,
+but went essentially unused in the production of commercial software. While most
+commercial 6502 software is written in assembly language, interpreted languages
+such as BASIC were also widely successful on the platform; notable examples
+include the Apple II, Commodore PET, and Commodore 64, whose default ROMs all
+booted into an integer BASIC interpreter.
+
+
+\subsubsection{Arithmetic Instructions}
+
+The 6502 supports addition with carry, subtraction with borrow, and bit-wise
+operations. Arithmetic may only be performed on 8-bit operands, so operations on
+wider quantities must be implemented by the programmer. The original MOS 6502
+also had a binary coded decimal mode, activated by setting a bit in the program
+status register. However, most ``compatible'' clones omited this mode.
+
+Table \ref{arith} describes the arithmetic instructions available on the 6502.
+
+\begin{table}
+\centering
+\begin{tabular}[H!]{|l|l|l|l|}
+\hline
+\textbf{Mnemonic} & \textbf{Description} & \textbf{Operand 1} \\
+\hline
+ADC & Add memory to A with carry. & M \\
+AND & And memory with A. & M \\
+ASL & Arithmetic shift left. & X,Y,A,M \\
+BIT & Test bits in A with memory. & M \\
+CMP & Compare A with memory. & M \\
+CPX & Compare X with memory. & M \\
+CPY & Compare Y with memory. & M \\
+DEC & Decrement memory. & M \\
+DEX & Decrement X. & \\
+DEY & Decrement X. & \\
+EOR & XOR A with memory. & M \\
+INC & Incrememt memory. & M \\
+INX & Incrememt X. & \\
+INY & Increment Y. & \\
+ORA & Or A with memory. & M \\
+ROL & Rotate left. & A,M \\
+ROR & Rotate right. & A,M \\
+SBC & Subtract memory from A with borrow. & M \\
+\hline
+\end{tabular}
+\caption{6502 Arithmetic Instruction}
+\label{arith}
+\end{table}
+
+\subsubsection{Control Flow Instructions}
+
+The 6502 features primitive support for subroutines with instructions that
+automatically push/pop the program counter to/from the stack. However, the small
+stack space made the effective use of coroutines critical to any non-trivial
+6502 programs. Returning to the interrupted task from a interrupt handler is
+also automatic; use of this functionality is required in the case of the
+non-maskable interrupt, as the NMI pin will not be pulled high until the NMI
+vector executes the RTI instruction.
+
+Branch instructions accept an 8-bit relative offset to the current program
+counter; longer jumps must be implemented with unconditional jumps or subroutine
+calls.
+
+Table \ref{control} describes the control flow instructions available on the
+6502.
+
+\begin{table}
+\centering
+\begin{tabular}[H!]{|l|l|l|l|}
+\hline
+\textbf{Mnemonic} & \textbf{Description} & \textbf{Operand 1} \\
+\hline
+BCC & Branch on carry clear. & M \\
+BCS & Branch on carry set. & M \\
+BEQ & Branch on zero set. & M \\
+BMI & Branch on negative set. & M \\
+BNE & Branch on zero clear. & M \\
+BPL & Branch on negative clear. & M \\
+BRK & Trigger maskable interrupt. & \\
+BVC & Branch on overflow clear. & M \\
+BVS & Branch on overflow set. & M \\
+CLC & Clear carry. & \\
+CLD & Clear decimal. & \\
+CLI & Clear interrupt. & \\
+CLV & Clear overflow. & \\
+JMP & Unconditional jump. & M \\
+JSR & Call subroutine. & M \\
+NOP & No operation. & M \\
+RTI & Return from interrupt handler. & \\
+RTS & Return from subroutine. & \\
+SEC & Set carry. & \\
+SED & Set decimal. & \\
+SEI & Set interrupt. & \\
+\hline
+\end{tabular}
+\caption{6502 Control Flow Instructions}
+\label{control}
+\end{table}
+
+\subsubsection{Memory Instructions}
+
+The 6502 memory manipulation instructions operate only on 8-bit operands.
+Notably, the accumulator is the only general purpose register that may be pushed
+onto the stack. The 6502 does not have a strict subroutine calling convention,
+but conventionally the A register is preserved by subroutine calls.
+
+Table \ref{mem} describes the memory instructions available on the 6502.
+
+\begin{table}
+\centering
+\begin{tabular}[H!]{|l|l|l|l|}
+\hline
+\textbf{Mnemonic} & \textbf{Description} & \textbf{Operand 1} \\
+\hline
+LDA & Load A with memory. & M \\
+LDX & Load X with memory. & M \\
+LDY & Load Y with memory. & M \\
+PHA & Push A onto stack. & \\
+PHP & Push status onto stack. & \\
+PLA & Pull A from stack. & \\
+PLP & Pull status from stack. & \\
+STA & Store A in memory. & M \\
+STX & Store X in memory. & M \\
+STY & Store Y in memory. & M \\
+TAX & Transfer A to X. & \\
+TAY & Transfer A to Y. & \\
+TSX & Transfer stack pointer to X. & \\
+TXA & Transfer X to A. & \\
+TXS & Transfer X to stack pointer. & \\
+TYA & Transfer Y to A. & \\
+\hline
+\end{tabular}
+\caption{6502 Memory Instructions}
+\label{mem}
+\end{table}
+
 \subsection{Addressing Modes}
 
-\subsection{Interrupts and Timing Considerations}
+The 6502 is an 8-bit CPU in the truest sense; there aren't even any registers
+capable of storing a full memory address. Naturally this has consequences for
+performing memory operations. The 6502 features some unique addressing modes to
+ease the process of pointer construction.
+
+The expected addressing modes of immediate values, relative branches, and
+absolute addressing are present; a full 16-bit literal address may be endoded
+in pointer-accepting instructions. Absolute indexed addressing is also
+supported; in this mode a 16-bit literal is added to the contents of the X or Y
+registers to compute the final pointer.
+
+Address construction difficulty arises when a full 16-bit address must be
+computed at run-time. To aid this process, a specially designated address range
+known as the ``zero page'' is provided. The zero page consists of the first 256
+memory addresses (0000-00FF), and these addresses may be indexed by a single
+byte literal. Zero page addresses may also be used for indirection, e.g.
+``(\$AB,X)'' adds the contents of X to the zero page address \$AB, and
+``(\$AB),Y'' adds the contents of Y to the value at the memory location at the
+zero page address \$AB.
+
+\subsection{Interrupts}
 
 The 6502 features two programmable interrupts: an edge-triggered non-maskable
 interrupt, and a level-triggered maskable interrupt. The maskable interrupt
@@ -168,7 +333,7 @@ Upon interrupt receipt, the CPU finishes the current instruction. Then the
 program counter and program status registers are pushed onto the stack. The
 program counter is then loaded with the address in the appropriate entry in the
 interrupt vector table. The interrupt handler returns by executing the
-\texttt{RTI} return from interrupt instruction. There are only 256 bytes
+RTI return from interrupt instruction. There are only 256 bytes
 available on the 6502's stack, and each interrupt handler stack frame occupies
 three such bytes. Therefore, it is critical that no deeply nested interrupt
 handlers are executed on the 6502.
@@ -183,18 +348,12 @@ The conclusion goes here.
 
 \begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+\bibitem{asm}
+Leventhal, Lance A. \emph{6502 Assembly Language Programming}, 1986
+
+\bibitem{isa}
+\emph{Rockwell 6502 Programmers Reference}, 1981
 
 \end{thebibliography}
-
-\begin{IEEEbiographynophoto}{Chris Ranc}
-Something about Chris.
-\end{IEEEbiographynophoto}
-
-\begin{IEEEbiographynophoto}{Travis Whitaker}
-Something about Travis.
-\end{IEEEbiographynophoto}
 
 \end{document}
