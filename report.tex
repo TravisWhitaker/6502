@@ -47,14 +47,104 @@ affordable home video game consoles.
 \section{History}
 
 \subsection{Beginnings at Motorola}
+Most of the engineers that designed the mos 6502 originated from the team 
+that developed the Motorola 6800 series.  Some of these engineers were John 
+Buchanan the lead 6800 chip designer, Rod Orgill in charge of circuit analysis 
+and chip layout (later worked on the 6501) [5], Bill Mensch who Designed 
+peripheral IC's for the 6800 family, and Chuck Peddle Architectural Support of the 6800.
+[2]  Designed the 6850 ACIA serial interface  and was the lead of architecture support 
+for the 6502 [3]
+
+Motorola target customers were large computing and electronics firms.
+main focus was to reduce development cost for these firms as opposed to 
+reducing the cost of their processors.  Doing so by providsing prototype 
+processors and providing development software through timesharing.  
+Some of these target Firms were HP, Textronix, TRW, and Chrysler [4]
+
+Chuck Peddle saw how clients disliked the high price of the 6800 (\$300) when 
+accompanying sales representatives on customer visits. To remedy this Peddle and
+other 6800 engineers who saw the issue began outlining a more cost effective design.
+One that would remove inessential debugging features and utilize depletion-mode MOS 
+transistors.  Doing so would reduce size to produce more chips on a silicon wafer and 
+thus effectively reduce the cost to around \$25. [6]\newline
+
+ \centerline{\includegraphics[scale=0.265]{images/Depletion_Mode_Table.png}}
+
+\centerline{Depletion-Mode MOSFET Table [7]}
+
+Due to Motorola's new fabrication plant in Austin Texas having difficulty with 
+utilizing depletion-mode technology in fabrication and Motorola not liking the idea of designing 
+cheaper processors Chuck Peddle's idea for making a more cost effective 6800 was dismissed.  
+Peddle saw this as "product abandonment" so he decided to no longer work on the 6800 and 
+move forward with his more effective design.  [6]
 
 \subsection{Move to MOS Technology}
+To continue his more ideal design for the 6800 Chuck Peddle teamed up with his old colleague John Pavinen 
+from General Electric who was running a fabrication company by the name of MOS Technologies.  Bringing on
+Bill Mensch and several other key Motorola engineers to this project they began work on Peddle's CPU .  
+With MOS Technology they were able to better fabricate their designs with the use of depletion-mode MOS 
+transistors.  Another key benefit of working with MOS Technologies was their improved fabrications process
+that significantly reduced the production of defective chips.  Most fabrication methods in the 1970's 
+had a 30\% success rate when producing chips.  MOS however developed a method in which a correction stage was 
+added to the chip manufacturing process. It would attempt to remove errors before reaching the final 
+fabrication stage which made the chip production success rate come to 70\% effectively reducing waste cost.  
+To further improve cost effectiveness Peddle instructed his team to implement processor instructions that 
+most customers required for their products.  Removing some of the more bloated debugging concepts that the 
+Motorola 6800 had which in tandem with the use of depletion-mode technology significantly decreased the size
+and ultimately cost of the processors. [6]  The end products being the MOS 6501 and 6502.   
+
+\subsection{Motorola Lawsuit}
+When their products were introduced to Wescon it became a massive hit.  Their low cost processor
+received extensive press coverage which beneficial also had a downside.  Motorola was able to see the 
+popularity of their former engineers work making them now a serious competitor.  At first they tried 
+reducing the costs of their processors and design kits.  Their cost reduction didn't quite meet the cost of 
+the MOS 6501 and 6502 so they they pursued an injunction in Federal Court to prevent MOS Technology from 
+manufacturing and selling the chips.  
+
+Motorola was able to push this through as they were a wealthy company with a believable case of infringement 
+since many of their key engineers who designed the Motorola 6800 were also apart of the MOS 6502 and 6501 design
+team.  Chuck Peddle, Bill Mensch, and a few other engineers were named as inventors in their patents for the
+6800.  Along with this one of the engineers, Mike James, brought into project by Peddle took in his 6800
+designs.[1]  Which Peddle had said not to do when they began work on the MOS 6501 and 6502.  Since MOS 
+Technology was still small and lacked the money to fight this case they instead settled and agreed to 4
+things.  MOS Technology would return the 6800 documents taken, pay Motorola \$200,000,  remove the 6501 from
+their product line,  and agree to cross-license processor patents. [8]  This didn't affect the rise 
+of the MOS Technology in the use of personal computers fortunately because the 6502 was their flagship processor 
+while the 6501 was more of a demonstration model for their technology. [6]
 
 \subsection{Beginnings of the Microcomputer}
+With the legality troubles over MOS Technology began working on development kits to get their products out
+to companies.  Chuck Peddle designed the MDT-650 (Microcomputer Development Terminal) which was a single 
+board development computer with terminal. Another development board made that was sold partially completed 
+was the KIM-1 (Keyboard Input Monitor) which was very popular amongst hobbyists as well as engineers. 
+[6]
+
+With the popularity of the MOS 6502 building it saw its first popular use by Apple Computers in the creation
+of the Apple I developed by Steve Wozniak. The Apple II would also come to use the MOS 6502 but the biggest 
+and most popular customer for the time to use the chip was Commodore in just about everyone of its products.  
+Ranging from the Commodore PET, VIC-20, and the popular Commodore 64.  Even their floppy disk drive utilized 
+a 6502 to function. This popular use lead to Commodore acquiring MOS Technology for developing their chips 
+and giving them quicker access to newer chips.   Aside from the popularity of the processor in the personal 
+computer market video games companies saw it as usable for creating processor based video games. [6]
 
 \subsection{Home Game Consoles Emerge}
+The Founders of Atari, Ted Dabney and Nolan Bushnell, in 1970's began to investigate microprocessor based 
+video games as opposed to using discrete logic like for their arcade games.[9]  This would provide the ability 
+to write games in software so a home entertainment system could play multiple different games.  Their 
+prototype processor based console, titled Stella, utilized a lower cost version of the MOS 6502 called the 
+6507.  The 6507 was basically a modified 6502 but cheaper to make for being a more ideal for its use in designing 
+their prototype console.  This prototype Would com to be known as the Atari 2600.  
+
 
 \subsection{Penetration in the Japanese Market}
+Outside Atari the arcade market in japan caught hold of the chip and began utilizing a different variation of 
+the 6502 made by Rioch.  This variation removed binary-coded decimal and added 22 memory-mapped Registers for
+sound, joystick reading, and sprite list DMA.  This modifed version of the 6502 was cost-effective and had more
+features useful for video games.  However due to the obscurity of the 6502 in the Japanese market Nintendo had
+to develop its own proprietary software development platform for making games.  The creation of which brought 
+about the model for unified platform development as well as software liscensing that is still used today.[10]
+
+
 
 \section{Implementation}
 
@@ -183,9 +273,30 @@ The conclusion goes here.
 
 \begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+%\bibitem{IEEEhowto:kopka}
+%H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+\bibitem{IEEEhowto:Bagnall}
+Bagnall, Brian (2010). Commodore, a company on the edge. (2nd ed.). Winnipeg, Manitoba: Variant Press
+\bibitem{IEEEhowto:Donohue}
+Donohue, James F. (October 27, 1988). "The microprocessor first two decades: The way it was". EDN (Cahners Publishing) 
+\bibitem{IEEEhowto:Hepworth}
+Hepworth, Edward C., Rodney J. Means, Charles I. Peddle, "Asynchronous Communication Interface Adaptor", Patent 3975712, issued August 17, 1976
+\bibitem{IEEEhowto:Motorola}
+Motorola (August 5, 1976). "They stay out front with Motorola's M6800 Family". Electronics (McGraw-Hill) 49
+\bibitem{IEEEhowto:}
+"Motorola 6800 Oral History Panel" Thomas H. Bennett, John Ekiss, William (Bill) Lattin, Jeff Lavell. Computer History Museum, March 28, 2008, moderator: David Laws.
+\bibitem{IEEEhowto:}
+Matthews, Ian(2006), "The Leendary Chuck Peddle, Inventor of the Personal Computer",http://www.commodore.ca/commodore-history/the-legendary-chuck-peddle-inventor-of-the-personal-computer/
+\bibitem{IEEEhowto:}
+Harrison, Linden, "An Introduction to Depletion-Mode Mosfets"[pdf],http://www.aldinc.com/pdf/IntroDepletionModeMOSFET.pdf
+\bibitem{IEEEhowto:}
+"Motorola, MOS Technology settle patent suit". Electronics (New York: McGraw-Hill) 49 (7): 39. April 1, 1975
+\bibitem{IEEEhowto:}
+Chafkin, Max (April 1, 2009). "Nolan Busnell is Back in the Game". Inc.
+\bibitem{IEEEhowto:}
+Liedholm, Marcus; Liedholm, Mattias. "History of the Nintendo Entertainment System or Famicom". Nintendo Land
+
 
 \end{thebibliography}
 

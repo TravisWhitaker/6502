@@ -1,0 +1,18 @@
+Sources: 
+1)-[6] http://www.commodore.ca/commodore-history/the-legendary-chuck-peddle-inventor-of-the-personal-computer/   
+
+2) http://www.liquisearch.com/depletion-load_nmos_logic/history_and_background/depletion-mode_transistors
+
+3) oral history of motorola 6800 -[5]
+http://archive.computerhistory.org/resources/text/Oral_History/Motorola_6800/102702020.05.01.pdf
+
+4) depletion-mode MOSFET paper (page 4 for picture) - [7]
+http://www.aldinc.com/pdf/IntroDepletionModeMOSFET.pdf
+
+wiki
+
+13 - [2]
+14 - [3]
+15 - [4]
+44 - [1]
+45 - [8]
